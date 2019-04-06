@@ -1,0 +1,14 @@
+.characterZones {
+    height: 230px;
+}
+
+.fighter {
+    height: 200px;
+    width: 200px;
+    float: left;
+}
+
+#fighterImage {
+    height: 200px;
+    width: 200px;
+}
