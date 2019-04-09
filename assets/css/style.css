@@ -5,10 +5,25 @@
 .fighter {
     height: 200px;
     width: 200px;
-    float: left;
 }
 
-#fighterImage {
+.fighterImage {
     height: 200px;
     width: 200px;
+}
+
+#selectEnemy {
+    display: none;
+}
+
+.rowTitles {
+    width: 100%;
+}
+
+.yourFighter {
+    border: 2px solid blue;
+}
+
+.enemyFighters {
+    border: 2px solid red;
 }
