@@ -13,23 +13,31 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- Style sheet -->
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-
     <title>unit 4 game</title>
 </head>
 <body>
     <header class="h1 text-center">Smash Bros. Mini-Game</header>
 
     <div class="container">
+        <!-- Top Row: For inital character select and your Selected fighter -->
         <div class="row characterZones">
           <div class="col d-flex justify-content-center" id="topRow"></div>
         </div>
-        <div class="row characterZones" id="midRow">
-            <div class="col d-flex justify-content-center">
-                <div id="selectFighter" class="h2 text-center">Select your fighter!</div>
-                <div id="selectEnemy" class="h2 text-center">Select your Opponent!</div>
-            </div>
-
+        <!-- Prompt Row: For prompts and button events for player -->
+        <div class="row promptZone justify-content-center">
+            <!-- Prompts for player to select fighters -->
+            <div id="selectFighter" class="h2 text-center">Select your Fighter!</div>
+            <div id="selectEnemy" class="h2 text-center hidden">Select your Opponent!</div>
+            <!-- Fight and Try Again game buttons -->
+            <button type="button" class="btn btn-danger hidden m-3" id="fightButton">Fight!</button>
+            <button type="button" class="btn btn-outline-danger hidden" id="loseplayAgain">You Lose! Play Again?</button>
+            <button type="button" class="btn btn-success hidden" id="winplayAgain">You Win! Play Again?</button>
         </div>
+        <!-- Mid Row: For holding current enemy player will be fighting -->
+        <div class="row characterZones" id="midRow">
+            <div class="col d-flex justify-content-center" id="opponentZone"></div>
+        </div>
+        <!-- Bot Row: For holding all opponents -->
         <div class="row characterZones">
             <div class="col d-flex justify-content-center" id="botRow"></div>
         </div>

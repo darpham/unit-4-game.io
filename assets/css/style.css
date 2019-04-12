@@ -1,29 +1,41 @@
+/* import font downloaded specifaclly from SSBU */
+@font-face {
+    font-family: ssbUltimateFont;
+    src: url(../font/ssb_ultimate_font.ttf); 
+}
+/* adds background image and changes font */
+body {
+    background: url(../images/SSBU-Galeem.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: black;
+    font-family: ssbUlitmateFont;
+}
+/* Format the zones characters will be in */
 .characterZones {
     height: 230px;
+    background-color: #fff;
+    background-color: rgba(255,255,255,0.5);
 }
-
+/* Format the divs each individual fighter will be in */
 .fighter {
-    height: 200px;
-    width: 200px;
+    height: 180px;
+    width: 180px;
 }
-
+/* Correctly sizes the images of each fighter */
 .fighterImage {
-    height: 200px;
-    width: 200px;
+    height: 180px;
+    width: 180px;
 }
-
-#selectEnemy {
-    display: none;
-}
-
-.rowTitles {
-    width: 100%;
-}
-
+/* Adds a border around the player's fighter */
 .yourFighter {
     border: 2px solid blue;
 }
-
+/* Adds a border around the player's opponents */
 .enemyFighters {
     border: 2px solid red;
+}
+/* class to hide/un-hide certain divs until needed */
+.hidden {
+    display: none;
 }
