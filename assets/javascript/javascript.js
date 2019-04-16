@@ -125,6 +125,7 @@ gameEvents = {
             var enemyFighter = $('#opponentZone').find('.fighter');
 
             characterMutation.loseHealth(enemyFighter,gameEvents.calculateDamage(yourFighter));
+            
             characterMutation.loseHealth(yourFighter,gameEvents.calculateDamage(enemyFighter));
         });
     },
@@ -132,12 +133,12 @@ gameEvents = {
     calculateDamage : function(fighter) {
         var dps = fighter.attr('dps');
         if ( $(fighter).hasClass('yourFighter') ) {
-            var mulitplier = 40 + (.1 * Math.floor(Math.random() * Math.floor(10)));
+            var mulitplier = 5 + (.1 * Math.floor(Math.random() * Math.floor(10)));
             damage = Math.round(dps * mulitplier);
             console.log(damage);
             return damage
         } else {
-            var mulitplier = 1 + (.1 * Math.floor(Math.random() * Math.floor(10)));
+            var mulitplier = 1.2 + (.1 * Math.floor(Math.random() * Math.floor(10)));
             damage = Math.round(dps * mulitplier);
             console.log(damage);
             return damage
