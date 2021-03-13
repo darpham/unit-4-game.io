@@ -54,7 +54,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: ${{ env.DOCKER_REPOSITORY }}
         dockerfile: Dockerfile
-        tags: ${{ steps.vars.outputs.sha_short }}
+        tags: "${{ env.DOCKER_REPOSITORY }}:sha-${{ steps.vars.outputs.sha_short }}"
         tag_with_ref: true
         tag_with_sha: true
         add_git_labels: true
