@@ -42,6 +42,10 @@ jobs:
             --query taskDefinition | \
             jq 'del(.taskDefinitionArn,.revision,.status,.registeredBy,.registeredAt,.compatibilities,.requiresAttributes)' > task-def.json)"
 
+    - name: Set GIT short sha
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+            
     - name: Build and push Image DockerHub
       id: docker_build
       uses: docker/build-push-action@v2
@@ -50,13 +54,10 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: ${{ env.DOCKER_REPOSITORY }}
         dockerfile: Dockerfile
+        tags: ${{ steps.vars.outputs.sha_short }}
         tag_with_ref: true
         tag_with_sha: true
         add_git_labels: true
-
-    - name: Set GIT short sha
-      id: vars
-      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
     - name: Add new image ID in the Amazon ECS task definition
       id: task-definition
