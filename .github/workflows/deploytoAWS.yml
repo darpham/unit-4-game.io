@@ -1,0 +1,77 @@
+name: Build Image & Deploy into AWS ECS
+on:
+  push:
+    branches:
+      - master
+  release:
+    types:
+      - published
+
+env:
+  DOCKER_REPOSITORY: darpham/fighting-game
+  AWS_ECS_CLUSTER_NAME: incubator-test
+  AWS_APP_ENVNAME: fighting-game-test
+  AWS_REGION_PROD: us-west-1
+  
+jobs:
+  production-deploy:
+    name: Deploy production into AWS
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Debug Action
+      uses: hmarr/debug-action@v1.0.0
+      
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION_PROD }}
+
+    - name: Pull Task Definition & write to file
+      id: aws-task-definition
+      run: |
+        echo "::set-output name=task-definition::$(\
+          aws ecs describe-task-definition \
+            --task-definition ${{ env.AWS_APP_ENVNAME }}-td \
+            --query taskDefinition | \
+            jq 'del(.taskDefinitionArn,.revision,.status,.registeredBy,.registeredAt,.compatibilities,.requiresAttributes)' > task-def.json)"
+
+    - name: Build and push Image DockerHub
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: ${{ env.DOCKER_REPOSITORY }}
+        dockerfile: Dockerfile
+        tag_with_ref: true
+        tag_with_sha: true
+        add_git_labels: true
+
+    - name: Set GIT short sha
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+    - name: Add new image ID in the Amazon ECS task definition
+      id: task-definition
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-def.json
+        container-name: ${{ env.AWS_APP_ENVNAME }}-container
+        # image: ${{ env.DOCKER_REPOSITORY }}:sha-${{ steps.vars.outputs.sha_short }}
+        image: ${{ env.DOCKER_REPOSITORY }}:latest
+
+    - name: Deploy Amazon ECS
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-definition.outputs.task-definition }}
+        service: ${{ env.AWS_APP_ENVNAME }}
+        cluster: ${{ env.AWS_ECS_CLUSTER_NAME }}
+        wait-for-service-stability: true
+        wait-for-minutes: 5 minutes
